@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Classroll – School portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F7F3;--surf:#fff;--ink:#17301B;--mute:#566A59;--line:#D7E3D8;--g1:#1B5E20;--g2:#2E7D32;--g3:#388E3C;--gl:#E8F5E9;--gm:#A5D6A7;--in:#FFF9C4;--star:#E0A100;--bad:#B3362B;--badsoft:#F9E1DE;--side:#1B5E20;--acc:#FFF9C4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1A0F;--surf:#13261A;--ink:#E6F2E7;--mute:#9DB6A0;--line:#25402B;--gl:#1B3524;--gm:#2E7D32;--in:#4B4511;--star:#F5C542;--bad:#F08A80;--badsoft:#43201C;--side:#0A1D0E}}
+:root[data-theme="dark"]{--bg:#0C1A0F;--surf:#13261A;--ink:#E6F2E7;--mute:#9DB6A0;--line:#25402B;--gl:#1B3524;--gm:#2E7D32;--in:#4B4511;--star:#F5C542;--bad:#F08A80;--badsoft:#43201C;--side:#0A1D0E}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:400 15px/1.5 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,system-ui,sans-serif;margin:0;letter-spacing:-.01em}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100%}
+aside{background:var(--side);color:#E8F5E9;padding:18px 12px;display:flex;flex-direction:column;gap:3px}
+.brand{font:700 19px Sora,sans-serif;color:#fff;padding:4px 10px}
+.sub{font-size:13px;color:var(--gm);padding:0 10px 12px}
+.nav{background:none;border:0;color:inherit;text-align:left;padding:8px 12px;border-radius:8px;font:inherit;cursor:pointer}
+.nav:hover{background:rgba(255,255,255,.1)}
+.nav[aria-current=true]{background:var(--acc);color:#12331A;font-weight:600}
+.out{margin-top:auto}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--star);outline-offset:1px}
+main{padding:20px 26px;min-width:0}
+.hd{background:var(--g1);color:#fff;border-radius:10px;padding:14px 18px;margin-bottom:16px;border-bottom:4px solid var(--acc)}
+.hd h1{font-size:19px}.hd div{color:var(--gm);font-size:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+label{color:var(--mute);font-size:14px}
+select,input,textarea,button.btn{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surf);color:var(--ink)}
+button.btn{background:var(--g2);color:#fff;border-color:var(--g2);font-weight:600;cursor:pointer}
+button.btn.alt{background:var(--surf);color:var(--ink);border-color:var(--line)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--surf);border:1px solid var(--line);border-top:4px solid var(--g2);border-radius:8px;padding:12px}
+.stat b{display:block;font:700 22px Sora,sans-serif}.stat small{color:var(--mute)}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:10px;color:var(--g2)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:left}
+th{background:var(--gm);color:#12331A;font-size:13px;font-weight:600;white-space:pre-line;vertical-align:bottom}
+tr.mx td{background:var(--gl);font-weight:600}
+td.auto{background:var(--gl)}
+td.nm{position:sticky;left:0;background:var(--surf);z-index:1}
+input.mk{width:58px;background:var(--in);color:#17301B;text-align:center;padding:5px}
+input.nmi{width:190px;background:var(--in);color:#17301B}
+.stars{color:var(--star);letter-spacing:1px}
+.pill{padding:2px 9px;border-radius:99px;font-size:13px;font-weight:600;background:var(--gl);color:var(--g2);border:0}
+.pill.bad{background:var(--badsoft);color:var(--bad)}
+.tog{cursor:pointer}
+.bar{height:9px;background:var(--line);border-radius:9px;overflow:hidden;min-width:100px}.bar i{display:block;height:100%;background:var(--g3)}
+.key{font-size:13px;color:var(--mute);margin:0 0 10px}.key span{padding:1px 8px;border-radius:4px;margin-right:6px;color:#17301B}
+.code{font:700 15px ui-monospace,Menlo,monospace;letter-spacing:.06em;background:var(--in);color:#17301B;padding:2px 8px;border-radius:5px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--g1);color:#fff;padding:9px 16px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}.toast.on{opacity:1}
+.empty{color:var(--mute);padding:8px 0}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--g1)}
+.lbox{background:var(--surf);border-radius:14px;padding:28px;max-width:400px;width:100%;border-top:6px solid var(--acc)}
+.lbox input{width:100%;font-size:18px;letter-spacing:.08em;text-transform:uppercase;margin:12px 0}
+.lbox .btn{width:100%;padding:10px}
+.hint{font-size:13px;color:var(--mute);margin-top:14px}
+.logo{height:42px;max-width:120px;object-fit:contain;border-radius:8px;vertical-align:middle;margin-right:10px;background:#fff;padding:2px}.login{background-size:cover;background-position:center}.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}.gal figure{margin:0;background:var(--surf);border:1px solid var(--line);border-radius:10px;overflow:hidden}.gal img,.gal video{width:100%;height:160px;object-fit:cover;display:block;background:#000}.gal figcaption{padding:8px;font-size:14px}.banner{background:var(--gl);border-left:6px solid var(--acc);padding:10px 14px;border-radius:8px;margin-bottom:14px}.banner.warn{background:var(--badsoft);border-color:var(--bad)}
+@media print{aside,.noprint,.toast{display:none!important}.app{display:block}main{padding:0}}
+@media(max-width:760px){.app{grid-template-columns:1fr}aside{flex-direction:row;overflow-x:auto;padding:10px}.brand,.sub{display:none}.nav{white-space:nowrap}.out{margin:0}main{padding:14px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const CLS=['Creche','Nursery 1','Nursery 2','KG 1','KG 2','Basic 1','Basic 2','Basic 3','Basic 4','Basic 5','Basic 6A','Basic 6B','JHS 1','JHS 2','JHS 3'];
+const COMP=['Class Exercises','Class Test 1','Class Test 2','Homework','Mid-Term Exam','End-of-Term Exam'];
+const G=[[1,80,'Excellent'],[2,70,'Very Good'],[3,60,'Good'],[4,55,'Fairly Good'],[5,50,'Average'],[6,45,'Below Average'],[7,40,'Weak'],[8,35,'Very Weak'],[9,0,'Needs Urgent Help']];
+const LV=['Needs Urgent Support','Very Weak','Weak','Below Average','Below Average','Average','Fair','Good','Very Good','Excellent','Outstanding'];
+const TABS={admin:['Dashboard','Enter marks','Class dashboard','Learner report','Attendance','Learners','Access codes','Fees','Top 10','Gallery','Notices','Branding','Settings'],teacher:['Enter marks','Class dashboard','Learner report','Attendance','Top 10','Gallery','Notices'],parent:['Overview','Report card','Fees','Gallery','Notices']};
+const KEY='classroll-v2';
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+let S,sess=null,seedv=7;const rnd=()=>(seedv=(seedv*16807)%2147483647)/2147483647;
+function seed(){seedv=7;const FN=['Ama','Kofi','Esi','Yaw','Abena','Kwame','Efua','Kojo','Adwoa','Nii','Akosua','Fiifi','Maame','Kwesi','Araba','Nana'],LN=['Mensah','Boateng','Appiah','Owusu','Quaye','Sarpong','Asante','Tetteh','Darko','Amoah','Ofori','Acheampong'];
+ const st={school:'West Oxford International',year:'2026/2027',pass:60,max:[20,30,30,20,100,100],admin:'ADMIN-2026'};
+ const subj=['Mathematics','English','Science','Social Studies','ICT','RME','Creative Arts','Ghanaian Language'];
+ const D={},cd={};let uid=1;
+ CLS.forEach((c,ci)=>{cd[c]=40;D[c]=[];for(let k=0;k<7;k++){const a=35+rnd()*55,l={id:uid++,name:(LN[(k*5+ci)%12]+' '+FN[(k*3+ci*2)%16]).toUpperCase(),g:k%2?'F':'M',m:{},ab:Math.floor(rnd()*7),fee:800+ci*40,paid:0};
+  l.paid=Math.round(l.fee*[1,1,.5,.75,.25][Math.floor(rnd()*5)]);
+  subj.forEach(s=>{const b=a+(rnd()-.5)*22;l.m[s]=[0,1].map(t=>st.max.map(mx=>Math.max(0,Math.min(mx,Math.round(mx*(b+(rnd()-.5)*20+t*3)/100))))).concat([[]])});D[c].push(l)}});
+ return{st,subj,D,cd,attd:{},uid,pay:[],notes:[{t:'Welcome to Classroll. Marks, attendance and fees all live here.',d:today()},{t:'Term 2 report cards will be ready for parents once teachers finish entering marks.',d:today()}],
+  T:[{name:'Peniel Quarshie',code:'T-DEMO',cls:['Basic 6A','Basic 6B'],subj:['Mathematics']},{name:'Abigail Tetteh',code:'T-ENG01',cls:['JHS 1','JHS 2','JHS 3'],subj:['English','Social Studies']}],
+  P:[{name:'Kofi Mensah',code:'P-DEMO',lids:[D['Basic 6A'][0].id,D['JHS 1'][1].id]}]}}
+function fix(s){s.br=Object.assign({logo:'',tag:'',welcome:'',c1:'#1B5E20',c2:'#FFF9C4',bgType:'default',bg:'#F3F7F3',bgImg:'',hint:true},s.br||{});s.gal=s.gal||[];return s}
+function load(){let s=null;try{const j=localStorage.getItem(KEY);if(j)s=JSON.parse(j)}catch(e){}return fix(s||seed())}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const lg=()=>S.br.logo?`<img class="logo" src="${E(S.br.logo)}" alt="School logo">`:'';
+const loginBg=()=>S.br.bgType=='image'&&S.br.bgImg?`background-image:url('${E(S.br.bgImg)}')`:'';
+const banner=()=>{let h='';if(S.br.welcome)h+=`<div class="banner">${E(S.br.welcome)}</div>`;if(sess&&sess.role=='admin'&&S.st.admin=='ADMIN-2026')h+='<div class="banner warn"><b>Change the admin code.</b> It is still the demo code. Open Settings to set your own.</div>';return h};
+function theme(){const b=S.br,r=document.documentElement.style,dk=matchMedia('(prefers-color-scheme: dark)').matches,d=b.c1.toLowerCase()=='#1b5e20';const set=(k,v)=>v?r.setProperty(k,v):r.removeProperty(k),m=q=>`color-mix(in srgb,${b.c1} ${q}%,white)`;
+ set('--g1',d?'':b.c1);set('--side',d||dk?'':b.c1);set('--g2',d?'':m(82));set('--g3',d?'':m(68));set('--gl',d||dk?'':m(10));set('--gm',d||dk?'':m(38));set('--acc',b.c2.toLowerCase()=='#fff9c4'?'':b.c2);
+ document.body.style.background=b.bgType=='image'&&b.bgImg?`url("${b.bgImg}") center/cover fixed`:b.bgType=='color'?b.bg:''}
+async function putMedia(f,max,type){const isV=f.type.startsWith('video');let A=null;try{A=window.claude?await window.claude.use('assets'):null}catch(e){}let blob=f;
+ if(!isV){try{const bm=await createImageBitmap(f),k=Math.min(1,max/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext('2d').drawImage(bm,0,0,c.width,c.height);blob=await new Promise(r=>c.toBlob(r,type,.82))}catch(e){toast('That picture could not be read');return null}}
+ if(A){try{return(await A.upload(blob)).url}catch(e){toast('Upload was refused: '+(e.message||'check file storage'));return null}}
+ if(isV){toast('Videos need the hosted page with file storage. Pictures work here.');return null}
+ return await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(blob)})}
+const U={tab:0,cls:'',subj:'',term:1,dterm:1,dsubj:'ALL',rid:null,gp:'A',child:null,code:'',q:'',fc:'Basic 6A',fid:null,ab:{}};
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)};
+const avgA=a=>a.length?Math.round(a.reduce((p,c)=>p+c,0)/a.length*10)/10:null;
+function tot(l,s,t){let x=0,mx=0,n=0;((l.m[s]||[])[t-1]||[]).forEach((v,i)=>{if(v!==null&&v!==undefined){x+=v;mx+=S.st.max[i];n++}});return n?{s:x,f:Math.round(x/mx*1000)/10}:null}
+function fin(l,s,t){if(t==='A')return avgA([1,2,3].map(x=>fin(l,s,x)).filter(v=>v!==null));if(s==='ALL')return avgA(S.subj.map(x=>fin(l,x,t)).filter(v=>v!==null));const r=tot(l,s,t);return r?r.f:null}
+const gr=f=>G.find(g=>f>=g[1]),sn=f=>Math.min(10,Math.round(f/10)),sstr=n=>'★'.repeat(n)+'☆'.repeat(10-n),stx=n=>`<span class="stars">${sstr(n)}</span>`;
+const pos=(c,s,t,f)=>1+S.D[c].filter(x=>{const y=fin(x,s,t);return y!==null&&y>f}).length;
+const vals=(c,s,t)=>S.D[c].map(l=>fin(l,s,t)).filter(v=>v!==null);
+const rate=a=>a.length?Math.round(a.filter(v=>v>=S.st.pass).length/a.length*100):null;
+const pc=v=>v===null||v===undefined?'':v+'%';
+const med=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:Math.round((s[m-1]+s[m])*5)/10};
+const att=(c,l)=>S.cd[c]?Math.round((1-l.ab/S.cd[c])*100):100;
+const bal=l=>l.fee-l.paid;
+const cur=n=>'GH₵ '+n.toLocaleString();
+const findL=id=>{for(const c of CLS){const l=S.D[c].find(x=>x.id==id);if(l)return{l,c}}return null};
+const myCls=()=>sess.role=='admin'?CLS:sess.t.cls,mySub=()=>sess.role=='admin'?S.subj:sess.t.subj;
+const bar=p=>`<div class="bar"><i style="width:${Math.min(100,p||0)}%"></i></div>`;
+const tbl=(h,r,em)=>`<div class="scroll"><table><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${r.length?r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${h.length}" class="empty">${em||'Nothing here yet.'}</td></tr>`}</tbody></table></div>`;
+const stat=(n,l)=>`<div class="stat"><b>${n}</b><small>${l}</small></div>`;
+const sel=(id,o,v,lab)=>`<label>${lab} <select id="${id}">${o.map(x=>`<option value="${E(x[0])}" ${x[0]==v?'selected':''}>${E(x[1])}</option>`).join('')}</select></label>`;
+const cSel=(id,v)=>sel(id,myCls().map(c=>[c,c]),v,'Class');
+const sSel=(id,v,all)=>sel(id,[...(all?[['ALL','All subjects']]:[]),...mySub().map(s=>[s,s])],v,'Subject');
+const tSel=(id,v,an)=>sel(id,[[1,'Term 1'],[2,'Term 2'],[3,'Term 3'],...(an?[['A','Annual']]:[])],v,'Period');
+const codeGen=p=>{const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=a[Math.floor(Math.random()*a.length)];return p+'-'+s};
+const notices=()=>`<div class="card"><h3>Announcements</h3>${S.notes.length?S.notes.map(n=>`<p style="margin:8px 0"><b>${E(n.d)}</b> · ${E(n.t)}</p>`).join(''):'<p class="empty">No announcements yet.</p>'}</div>`;
+
+function report(l,c){const f=fin(l,'ALL','A'),ft=[1,2,3].map(t=>fin(l,'ALL',t)).filter(v=>v!==null),tr=ft.length>1?ft[ft.length-1]-ft[ft.length-2]:null;
+ const rows=S.subj.map(s=>[s,...[1,2,3].map(t=>pc(fin(l,s,t))),...(()=>{const a=fin(l,s,'A');return a===null?['','','']:[a+'%',gr(a)[0]+' · '+gr(a)[2],stx(sn(a))]})()]);
+ const sv=S.subj.map(s=>[s,fin(l,s,'A')]).filter(x=>x[1]!==null).sort((a,b)=>b[1]-a[1]);
+ const cm=f===null?'No marks recorded yet.':`${l.name.split(' ')[0]} is performing at "${LV[sn(f)].toLowerCase()}" level${sv.length>1?`, strongest in ${sv[0][0]} and needing most support in ${sv[sv.length-1][0]}`:''}.${tr!==null?(tr>0?' Results improved since last term. Keep it up!':tr<0?' Results dropped since last term. Extra practice at home will help.':' Results are steady.'):''}`;
+ return `<div class="card"><h3>${lg()}${E(S.st.school)}: report card</h3><p><b>${E(l.name)}</b> · ${c} · ${l.g=='M'?'Boy':'Girl'} · ${E(S.st.year)}</p>
+ <div class="stats">${stat(f===null?'–':f+'%','Annual average')}${stat(f===null?'–':pos(c,'ALL','A',f)+' of '+vals(c,'ALL','A').length,'Position in class')}${stat(f===null?'–':stx(sn(f)),f===null?'Stars':LV[sn(f)])}${stat(att(c,l)+'%','Attendance')}</div>
+ ${tbl(['Subject','Term 1','Term 2','Term 3','Annual','GES grade','Stars'],rows)}<p><b>Comment:</b> ${E(cm)}</p><button class="btn alt noprint" id="print">Print report card</button></div>`}
+
+function cells(l){const r=tot(l,U.subj,U.term);if(!r)return{s:'',f:'',g:'',r:'',p:'',n:'',st:''};const g=gr(r.f),n=sn(r.f);return{s:r.s,f:r.f,g:g[0],r:g[2],p:pos(U.cls,U.subj,U.term,r.f),n,st:stx(n)}}
+const KS=['s','f','g','r','p','n','st'];
+function refresh(){S.D[U.cls].forEach(l=>{const c=cells(l);KS.forEach(k=>{const e=document.getElementById(k+l.id);if(e)e.innerHTML=c[k]})})}
+
+const V={
+'Dashboard':()=>{const t=U.dterm,s=U.dsubj,all=CLS.flatMap(c=>S.D[c].map(l=>fin(l,s,t)).filter(v=>v!==null)),L=CLS.flatMap(c=>S.D[c]);
+ const paid=L.reduce((a,l)=>a+l.paid,0),billed=L.reduce((a,l)=>a+l.fee,0);
+ const rows=CLS.map(c=>{const a=vals(c,s,t),m=avgA(a),ss=avgA(a.map(sn));return[c,a.length,m??'',med(a)??'',a.length?Math.max(...a):'',a.length?Math.min(...a):'',pc(rate(a)),ss??'',ss===null?'':stx(Math.round(ss))]});
+ const sr=S.subj.map(x=>{const a=CLS.flatMap(c=>vals(c,x,t));const m=avgA(a);return[x,m??'',pc(rate(a)),m===null?'':stx(sn(m)),bar(m)]});
+ return `${banner()}<div class="row">${tSel('dterm',t,1)}${sel('dsubj',[['ALL','All subjects'],...S.subj.map(x=>[x,x])],s,'Subject')}</div>
+ <div class="stats">${stat(L.length,'Learners')}${stat(S.T.length,'Teachers')}${stat(avgA(all)??'–','School mean (%)')}${stat(all.length?pc(rate(all)):'–','Pass rate')}${stat(Math.round(paid/billed*100)+'%','Fees collected')}${stat(Math.round(L.reduce((a,l)=>a+att(CLS.find(c=>S.D[c].includes(l)),l),0)/L.length)+'%','Attendance')}</div>
+ <div class="card"><h3>Class performance</h3>${tbl(['Class','Learners','Mean','Median','Highest','Lowest','Pass rate','Avg stars','Class stars'],rows)}</div>
+ <div class="card"><h3>Subject performance (all classes)</h3>${tbl(['Subject','Mean','Pass rate','Stars',''],sr)}</div>`},
+'Enter marks':()=>{const L=S.D[U.cls];return `<div class="row">${cSel('cls',U.cls)}${sSel('subj',U.subj)}${tSel('term',U.term)}${sess.role=='admin'?'<button class="btn" id="add">Add learner</button>':''}</div>
+<p class="key"><span style="background:var(--in)">Yellow</span>type here <span style="background:var(--gl);margin-left:10px">Green</span>fills in automatically. Leave a mark empty if not done yet; type 0 for a zero. Marks save as you type.</p>
+<div class="card"><div class="scroll"><table><thead><tr><th>No.</th><th>Learner name</th>${COMP.map(c=>`<th>${c.replace(' ','\n')}</th>`).join('')}<th>Total\nscore</th><th>FINAL\nMARK /100</th><th>GES\ngrade</th><th>Remark</th><th>Position</th><th>Stars\n(/10)</th><th>Star rating</th></tr></thead><tbody>
+<tr class="mx"><td></td><td>MAXIMUM MARKS</td>${S.st.max.map(m=>`<td>${m}</td>`).join('')}<td>${S.st.max.reduce((a,b)=>a+b)}</td><td>100</td><td colspan="5"></td></tr>
+${L.map((l,i)=>{const c=cells(l),m=(l.m[U.subj]||[])[U.term-1]||[];return `<tr><td>${i+1}</td><td class="nm">${E(l.name)}</td>${S.st.max.map((mx,j)=>`<td><input class="mk" type="number" inputmode="numeric" min="0" max="${mx}" value="${m[j]??''}" data-l="${l.id}" data-j="${j}" aria-label="${COMP[j]} for ${E(l.name)}"></td>`).join('')}${KS.map(k=>`<td class="auto" id="${k}${l.id}">${c[k]}</td>`).join('')}</tr>`}).join('')}</tbody></table></div></div>`},
+'Class dashboard':()=>{const a=vals(U.cls,U.dsubj,U.dterm),n=a.length,ss=a.map(sn),sm=avgA(ss);const dist=G.map(g=>[g,a.filter(v=>gr(v)[0]==g[0]).length]);
+ const ranked=S.D[U.cls].filter(l=>fin(l,U.dsubj,U.dterm)!==null).sort((x,y)=>fin(y,U.dsubj,U.dterm)-fin(x,U.dsubj,U.dterm));
+ const low=ranked.filter(l=>fin(l,U.dsubj,U.dterm)<S.st.pass);
+ return `<div class="row">${cSel('cls',U.cls)}${sSel('dsubj',U.dsubj,1)}${tSel('dterm',U.dterm,1)}</div><div class="stats">${stat(n,'Learners assessed')}${stat(n?avgA(a):'–','Class mean (%)')}${stat(n?Math.max(...a):'–','Highest')}${stat(n?Math.min(...a):'–','Lowest')}${stat(n?pc(rate(a)):'–','Pass rate')}${stat(n?sm:'–','Average stars')}</div>
+ <div class="card">${n?`<h3>Class star rating: ${stx(Math.round(sm))} ${LV[Math.round(sm)]}</h3>`:'<p class="empty">No marks entered for this period yet.</p>'}</div>
+ <div class="card"><h3>Needs support (below ${S.st.pass}%)</h3>${low.length?low.map(l=>`<span class="pill bad" style="margin-right:6px">${E(l.name)} · ${fin(l,U.dsubj,U.dterm)}%</span>`).join(''):'<p class="empty">Nobody is below the pass mark.</p>'}</div>
+ <div class="card"><h3>Grade spread</h3>${tbl(['GES grade','Remark','Learners',''],dist.map(([g,c])=>[g[0],g[2],c,bar(n?c/n*100:0)]))}</div>
+ <div class="card"><h3>Learners ranked</h3>${tbl(['Pos.','Learner','Mark','Grade','Stars'],ranked.map(l=>{const f=fin(l,U.dsubj,U.dterm);return[pos(U.cls,U.dsubj,U.dterm,f),E(l.name),f,gr(f)[0],stx(sn(f))]}))}</div>`},
+'Learner report':()=>{const L=S.D[U.cls];if(!L.find(l=>l.id==U.rid))U.rid=L[0]?.id;const l=L.find(x=>x.id==U.rid);
+ return `<div class="row noprint">${cSel('cls',U.cls)}${sel('rid',L.map(x=>[x.id,x.name]),U.rid,'Learner')}</div>`+(l?report(l,U.cls):'<p class="empty">No learners in this class.</p>')},
+'Attendance':()=>{const L=S.D[U.cls],done=S.attd[U.cls]==today();return `<div class="row">${cSel('cls',U.cls)}<span class="pill">${S.cd[U.cls]} days recorded</span></div><div class="card"><h3>Register for ${today()}</h3>${done?'<p class="empty">Today’s register is already saved for this class.</p>':''}${tbl(['Learner','Today','Attendance'],L.map(l=>{const p=!U.ab[l.id];return[E(l.name),`<button class="pill tog ${p?'':'bad'}" data-att="${l.id}">${p?'Present':'Absent'}</button>`,att(U.cls,l)+'%']}))}<div class="row" style="margin-top:12px"><button class="btn" id="saveatt" ${done?'disabled':''}>Save register</button></div></div>`},
+'Learners':()=>{const rows=CLS.flatMap(c=>S.D[c].map(l=>[c,l])).filter(([c,l])=>l.name.toLowerCase().includes(U.q.toLowerCase()));
+ return `<div class="card"><h3>Admit a learner</h3><div class="row">${cSel('cls',U.cls)}<input id="nn" placeholder="Full name" aria-label="Full name"><select id="ng" aria-label="Gender"><option>M</option><option>F</option></select><button class="btn" id="admit">Admit learner</button></div></div>
+ <div class="card"><h3>All learners (${rows.length})</h3><div class="row"><input id="q" placeholder="Search by name" value="${E(U.q)}" aria-label="Search"></div>${tbl(['Name','Class','M/F','Average','Stars','Attendance','Fee balance'],rows.map(([c,l])=>{const f=fin(l,'ALL','A');return[E(l.name),c,l.g,pc(f),f===null?'':stx(sn(f)),att(c,l)+'%',bal(l)?`<span class="pill bad">${cur(bal(l))}</span>`:'<span class="pill">Cleared</span>']}))}</div>`},
+'Access codes':()=>`<div class="card"><h3>Give a teacher access</h3><p class="key">Choose the classes and subjects they teach (hold Ctrl or Cmd to pick more than one). The app creates their code.</p><div class="row"><input id="tn" placeholder="Teacher name" aria-label="Teacher name"><select id="tc" multiple size="5" aria-label="Classes">${CLS.map(c=>`<option>${c}</option>`).join('')}</select><select id="ts" multiple size="5" aria-label="Subjects">${S.subj.map(c=>`<option>${E(c)}</option>`).join('')}</select><button class="btn" id="gent">Generate teacher code</button></div>
+ ${tbl(['Teacher','Classes','Subjects','Code','Status',''],S.T.map((t,i)=>[E(t.name),t.cls.join(', '),t.subj.map(E).join(', '),`<span class="code">${t.code}</span>`,t.off?'<span class="pill bad">Revoked</span>':'<span class="pill">Active</span>',`<button class="btn alt" data-rev="T${i}">${t.off?'Restore':'Revoke'}</button>`]))}</div>
+ <div class="card"><h3>Give a parent access</h3><p class="key">Pick the learner and type the parent’s name. If that parent already has a code, the child is added to it.</p><div class="row">${cSel('fc',U.fc)}${sel('fid',S.D[U.fc].map(l=>[l.id,l.name]),U.fid||S.D[U.fc][0]?.id,'Learner')}<input id="pn" placeholder="Parent name" aria-label="Parent name"><button class="btn" id="genp">Generate parent code</button></div>
+ ${tbl(['Parent','Children','Code','Status',''],S.P.map((p,i)=>[E(p.name),p.lids.map(id=>E(findL(id)?.l.name)).join(', '),`<span class="code">${p.code}</span>`,p.off?'<span class="pill bad">Revoked</span>':'<span class="pill">Active</span>',`<button class="btn alt" data-rev="P${i}">${p.off?'Restore':'Revoke'}</button>`]))}</div>`,
+'Fees':()=>{const L=S.D[U.fc];const rows=CLS.flatMap(c=>S.D[c].filter(bal).map(l=>[E(l.name),c,cur(bal(l))]));
+ return `<div class="card"><h3>Record a payment</h3><div class="row">${cSel('fc',U.fc)}${sel('fid',L.map(l=>[l.id,`${l.name} (owes ${cur(bal(l))})`]),U.fid||L[0]?.id,'Learner')}<input id="pa" type="number" min="1" placeholder="Amount (GH₵)" aria-label="Amount"><button class="btn" id="pay">Issue receipt</button></div></div>
+ <div class="card"><h3>Outstanding balances</h3>${tbl(['Learner','Class','Balance'],rows,'Every account is cleared.')}</div><div class="card"><h3>Receipts</h3>${tbl(['Receipt','Learner','Date','Amount'],S.pay.slice().reverse().map(p=>[p.id,E(findL(p.lid)?.l.name),p.d,cur(p.a)]),'No receipts yet.')}</div>`},
+'Top 10':()=>{const all=myCls().flatMap(c=>S.D[c].map(l=>({c,l,f:fin(l,U.dsubj,U.gp)}))).filter(x=>x.f!==null).sort((a,b)=>b.f-a.f).slice(0,10);
+ return `<div class="row">${tSel('gp',U.gp,1)}${sSel('dsubj',U.dsubj,1)}</div><div class="card"><h3>Top 10 learners</h3>${tbl(['Rank','Learner','Class','M/F','Mark','Grade','Stars'],all.map((r,i)=>[i+1,E(r.l.name),r.c,r.l.g,r.f,gr(r.f)[0],stx(sn(r.f))]))}</div>`},
+'Notices':()=>(sess.role=='admin'?`<div class="row"><input id="nt" placeholder="Write an announcement" style="flex:1;min-width:220px" aria-label="Announcement"><button class="btn" id="post">Post announcement</button></div>`:'')+notices(),
+'Settings':()=>`<div class="card"><h3>School details</h3><div class="row"><label>School name <input data-st="school" value="${E(S.st.school)}"></label><label>Academic year <input data-st="year" value="${E(S.st.year)}"></label><label>Pass mark (%) <input data-st="pass" type="number" value="${S.st.pass}" style="width:80px"></label><label>Admin code <input data-st="admin" value="${E(S.st.admin)}"></label></div><p class="key">Change the admin code before real use.</p></div>
+<div class="card"><h3>Assessment maximum marks</h3><div class="row">${COMP.map((c,i)=>`<label>${c} <input data-mx="${i}" type="number" min="1" value="${S.st.max[i]}" style="width:80px"></label>`).join('')}</div></div>
+<div class="card"><h3>Subjects</h3><p>${S.subj.map(E).join(' · ')}</p><div class="row"><input id="ns" placeholder="New subject"><button class="btn" id="adds">Add subject</button><button class="btn alt" id="reset">Reset demo data</button></div></div>
+<div class="card"><h3>GES grading and star rating</h3>${tbl(['Grade','From (%)','Remark'],G.map(g=>[g[0],g[1],g[2]]))}<p class="key">Stars = final mark ÷ 10, rounded to the nearest whole star, out of 10.</p></div>`,
+'Gallery':()=>(sess.role=='admin'?`<div class="card noprint"><h3>Add to the gallery</h3><div class="row"><input id="gf" type="file" accept="image/*,video/*" multiple aria-label="Choose pictures or videos"><input id="gc" placeholder="Caption (optional)" aria-label="Caption"><button class="btn" id="gadd">Upload</button></div><p class="key">Pictures are resized automatically. Videos need file storage, which is available when the owner opens the hosted page.</p></div>`:'')+`<div class="gal">${S.gal.length?S.gal.map((g,i)=>`<figure>${g.type=='vid'?`<video src="${E(g.src)}" controls preload="metadata"></video>`:`<img src="${E(g.src)}" alt="${E(g.cap||'School photo')}">`}<figcaption>${E(g.cap||'')} ${sess.role=='admin'?`<button class="btn alt" data-gdel="${i}">Remove</button>`:''}</figcaption></figure>`).join(''):'<p class="empty">No pictures or videos yet.</p>'}</div>`,
+'Branding':()=>{const b=S.br,o=(v,t)=>`<option value="${v}" ${b.bgType==v?'selected':''}>${t}</option>`;return `<div class="card"><h3>Logo and welcome</h3><div class="row">${lg()}<input id="lf" type="file" accept="image/*" aria-label="Upload school logo"><button class="btn alt" id="lrm">Remove logo</button></div><div class="row"><label>Tagline <input data-br="tag" value="${E(b.tag)}" style="width:280px"></label></div><div class="row"><label>Welcome message <textarea data-br="welcome" rows="2" style="width:min(520px,100%)">${E(b.welcome)}</textarea></label></div></div>
+<div class="card"><h3>Colours</h3><div class="row"><label>Main colour <input type="color" data-br="c1" value="${b.c1}"></label><label>Highlight colour <input type="color" data-br="c2" value="${b.c2}"></label><button class="btn alt" id="bdef">Back to green and yellow</button></div></div>
+<div class="card"><h3>App background</h3><div class="row"><label>Style <select data-br="bgType">${o('default','Default')}${o('color','Solid colour')}${o('image','Picture')}</select></label><label>Colour <input type="color" data-br="bg" value="${b.bg}"></label><input id="bf" type="file" accept="image/*" aria-label="Upload background picture"></div></div>
+<div class="card"><h3>Sign-in page</h3><label><input type="checkbox" data-brc="hint" ${b.hint?'checked':''}> Show the demo codes on the sign-in page</label><p class="key">Turn this off before real use.</p></div>`},
+'Overview':()=>{const k=kids(),x=findL(U.child),l=x.l,c=x.c,f=fin(l,'ALL','A'),sv=S.subj.map(s=>[s,fin(l,s,'A')]).filter(v=>v[1]!==null).sort((a,b)=>b[1]-a[1]);
+ return childSel(k)+banner()+`<div class="stats">${stat(f===null?'–':f+'%','Annual average')}${stat(f===null?'–':pos(c,'ALL','A',f)+' of '+vals(c,'ALL','A').length,'Position')}${stat(f===null?'–':stx(sn(f)),f===null?'Stars':LV[sn(f)])}${stat(att(c,l)+'%','Attendance')}${stat(bal(l)?cur(bal(l)):'Cleared','Fee balance')}</div>
+ <div class="card"><h3>Subjects at a glance</h3>${tbl(['Subject','Annual mark','Stars',''],sv.map(([s,v])=>[s,v+'%',stx(sn(v)),bar(v)]),'No marks yet.')}</div>${notices()}`},
+'Report card':()=>{const x=findL(U.child);return `<div class="noprint">${childSel(kids())}</div>`+report(x.l,x.c)},
+'Fees ':()=>{}
+};
+V['Fees']=((adm)=>()=>sess.role=='parent'?(()=>{const x=findL(U.child),l=x.l;return childSel(kids())+`<div class="stats">${stat(cur(l.fee),'Billed')}${stat(cur(l.paid),'Paid')}${stat(bal(l)?cur(bal(l)):'Cleared','Balance')}</div><div class="card"><h3>Receipts</h3>${tbl(['Receipt','Date','Amount'],S.pay.filter(p=>p.lid==l.id).map(p=>[p.id,p.d,cur(p.a)]),'No receipts yet.')}</div>`})():adm())(V['Fees']);
+const kids=()=>sess.p.lids.map(findL).filter(Boolean);
+const childSel=k=>`<div class="row noprint">${sel('child',k.map(x=>[x.l.id,x.l.name+' ('+x.c+')']),U.child,'Child')}</div>`;
+
+function render(){const root=document.getElementById('root');
+ if(!sess){root.innerHTML=`<div class="login" style="${loginBg()}"><div class="lbox">${lg()}<h2>${E(S.st.school)}</h2><p style="color:var(--mute);margin:4px 0 0">Enter the access code the school gave you.</p><input id="code" placeholder="ACCESS CODE" autocomplete="off" aria-label="Access code" value="${E(U.code)}"><button class="btn" id="login">Sign in</button>${S.br.hint?'<p class="hint">Demo codes: <span class="code">ADMIN-2026</span> admin · <span class="code">T-DEMO</span> teacher · <span class="code">P-DEMO</span> parent</p>':''}</div></div>`;return}
+ const tabs=TABS[sess.role];if(U.tab>=tabs.length)U.tab=0;const tn=tabs[U.tab];
+ root.innerHTML=`<div class="app"><aside><div class="brand">${lg()}Classroll</div><div class="sub">${E(sess.name)} · ${sess.role}</div>${tabs.map((t,i)=>`<button class="nav" data-tab="${i}" ${i==U.tab?'aria-current="true"':''}>${t}</button>`).join('')}<button class="nav out" id="logout">Sign out</button></aside><main><div class="hd"><h1>${lg()}${E(S.st.school).toUpperCase()}</h1><div>${S.br.tag?E(S.br.tag)+' · ':''}${tn} · Academic year ${E(S.st.year)}</div></div>${V[tn]()}</main></div>`}
+function start(role){U.tab=0;U.cls=sess.role=='parent'?'':myCls()[0];U.subj=sess.role=='parent'?'':mySub()[0];U.dsubj='ALL';U.fc=CLS[10];U.fid=null;U.rid=null;if(sess.role=='parent')U.child=sess.p.lids[0]}
+document.addEventListener('click',e=>{const t=e.target,id=t.id,b=t.closest('[data-tab]');
+ const ADM=['add','admit','gent','genp','pay','post','adds','reset','lrm','bdef','gadd'];if((ADM.includes(id)||t.dataset.rev||t.dataset.gdel)&&(!sess||sess.role!='admin'))return;
+ if(id=='lrm'){S.br.logo='';save();render();return}
+ if(id=='bdef'){Object.assign(S.br,{c1:'#1B5E20',c2:'#FFF9C4'});save();theme();render();return}
+ if(t.dataset.gdel){S.gal.splice(+t.dataset.gdel,1);save();render();return}
+ if(id=='gadd'){const fs=[...document.getElementById('gf').files],cap=document.getElementById('gc').value.trim();if(!fs.length)return toast('Choose a picture or video first');toast('Uploading…');(async()=>{let n=0;for(const f of fs){if(S.gal.length>=40)break;const v=f.type.startsWith('video'),u=await putMedia(f,900,'image/jpeg');if(u){S.gal.push({type:v?'vid':'img',src:u,cap});n++}}save();render();toast(n?n+' added to the gallery':'Nothing was added')})();return}
+ if(b){U.tab=+b.dataset.tab;render();return}
+ if(id=='login'){if(Date.now()<(U.lock||0))return toast('Sign-in is paused. Try again in '+Math.ceil((U.lock-Date.now())/1000)+' seconds.');const v=document.getElementById('code').value.trim().toUpperCase();U.code=v;
+  if(v&&v===S.st.admin.toUpperCase())sess={role:'admin',name:'Administrator'};
+  else{const th=S.T.find(x=>x.code===v&&!x.off),p=S.P.find(x=>x.code===v&&!x.off);if(th)sess={role:'teacher',name:th.name,t:th};else if(p)sess={role:'parent',name:p.name,p}}
+  if(!sess){U.fails=(U.fails||0)+1;if(U.fails>=5){U.lock=Date.now()+60000;U.fails=0;toast('Too many wrong codes. Sign-in is paused for 1 minute.')}else toast('That code is not recognised, or it has been revoked. Check it and try again.');return}U.code='';U.fails=0;start();render();return}
+ if(id=='logout'){sess=null;render();return}
+ if(id=='print'){window.print();return}
+ if(id=='add'||id=='admit'){const nm=id=='admit'?(document.getElementById('nn').value.trim().toUpperCase()):'NEW LEARNER';if(!nm)return toast('Enter the learner’s name first');S.D[U.cls].push({id:S.uid++,name:nm,g:id=='admit'?document.getElementById('ng').value:'M',m:{},ab:0,fee:800+CLS.indexOf(U.cls)*40,paid:0});save();render();toast('Learner admitted to '+U.cls);return}
+ if(t.dataset.att){U.ab[t.dataset.att]=!U.ab[t.dataset.att];render();return}
+ if(id=='saveatt'){S.D[U.cls].forEach(l=>{if(U.ab[l.id])l.ab++});S.cd[U.cls]++;S.attd[U.cls]=today();U.ab={};save();render();toast('Register saved');return}
+ if(id=='gent'){const n=document.getElementById('tn').value.trim(),c=[...document.getElementById('tc').selectedOptions].map(o=>o.value),s=[...document.getElementById('ts').selectedOptions].map(o=>o.value);if(!n||!c.length||!s.length)return toast('Add a name and pick at least one class and one subject');const k=codeGen('T');S.T.push({name:n,code:k,cls:c,subj:s});save();render();toast('Teacher code: '+k);return}
+ if(id=='genp'){const n=document.getElementById('pn').value.trim(),lid=+(U.fid||S.D[U.fc][0]?.id);if(!n||!lid)return toast('Enter the parent’s name and pick a learner');let p=S.P.find(x=>x.name.toLowerCase()==n.toLowerCase());if(p){if(!p.lids.includes(lid))p.lids.push(lid)}else{p={name:n,code:codeGen('P'),lids:[lid]};S.P.push(p)}save();render();toast('Parent code: '+p.code);return}
+ if(t.dataset.rev){const a=t.dataset.rev[0]=='T'?S.T:S.P,x=a[+t.dataset.rev.slice(1)];x.off=!x.off;save();render();return}
+ if(id=='pay'){const l=S.D[U.fc].find(x=>x.id==(U.fid||S.D[U.fc][0]?.id)),a=+document.getElementById('pa').value;if(!l||a<=0)return toast('Enter an amount');if(a>bal(l))return toast('That is more than the balance of '+cur(bal(l)));l.paid+=a;S.pay.push({id:'R-'+(1001+S.pay.length),lid:l.id,a,d:today()});save();render();toast('Receipt issued');return}
+ if(id=='post'){const v=document.getElementById('nt').value.trim();if(!v)return toast('Write something first');S.notes.unshift({t:v,d:today()});save();render();toast('Posted');return}
+ if(id=='adds'){const v=document.getElementById('ns').value.trim();if(!v||S.subj.includes(v))return toast('Enter a new subject name');S.subj.push(v);save();render();toast('Subject added');return}
+ if(id=='reset'){if(confirm('Reset all data back to the demo? Codes and marks you added will be lost.')){S=fix(seed());save();theme();toast('Demo data restored');start();render()}return}
+});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.id=='code')document.getElementById('login').click()});
+document.addEventListener('input',e=>{const i=e.target;
+ if(i.type=='color'&&i.dataset.br&&sess&&sess.role=='admin'){S.br[i.dataset.br]=i.value;theme();return}
+ if(i.dataset.l){if(!myCls().includes(U.cls)||!mySub().includes(U.subj))return;const l=S.D[U.cls].find(x=>x.id==i.dataset.l),j=+i.dataset.j;let v=i.value===''?null:Math.max(0,+i.value);const mx=S.st.max[j];if(v!==null&&v>mx){v=mx;i.value=mx;toast('The maximum for this mark is '+mx)}
+  l.m[U.subj]=l.m[U.subj]||[[],[],[]];l.m[U.subj][U.term-1]=l.m[U.subj][U.term-1]||[];l.m[U.subj][U.term-1][j]=v;save();refresh()}
+ if(i.id=='q'){U.q=i.value;render();const q=document.getElementById('q');q.focus();q.setSelectionRange(q.value.length,q.value.length)}
+});
+document.addEventListener('change',e=>{const i=e.target,v=i.value,id=i.id;
+ if((i.dataset.st||i.dataset.mx||i.dataset.br||i.dataset.brc||id=='lf'||id=='bf')&&(!sess||sess.role!='admin'))return;
+ if(i.dataset.brc){S.br[i.dataset.brc]=i.checked;save();return}
+ if(id=='lf'||id=='bf'){const f=i.files[0];if(!f)return;putMedia(f,id=='lf'?256:1600,id=='lf'?'image/png':'image/jpeg').then(u=>{if(!u)return;if(id=='lf')S.br.logo=u;else{S.br.bgImg=u;S.br.bgType='image'}save();theme();render();toast('Saved')});return}
+ if(i.dataset.br){S.br[i.dataset.br]=v;save();theme();render();return}
+ if(id=='cls'){U.cls=v;U.rid=null;render()}else if(id=='subj'){U.subj=v;render()}else if(id=='term'){U.term=+v;render()}
+ else if(id=='dterm'||id=='gp'){U[id]=v=='A'?'A':+v;render()}else if(id=='dsubj'){U.dsubj=v;render()}else if(id=='rid'){U.rid=+v;render()}
+ else if(id=='child'){if(sess.p.lids.includes(+v))U.child=+v;render()}else if(id=='fc'){U.fc=v;U.fid=null;render()}else if(id=='fid'){U.fid=+v}
+ else if(i.dataset.st){S.st[i.dataset.st]=i.dataset.st=='pass'?(+v||60):(v.trim()||S.st[i.dataset.st]);save();render()}
+ else if(i.dataset.mx){S.st.max[+i.dataset.mx]=Math.max(1,+v||1);save();render()}
+});
+let last=Date.now();['click','keydown','input'].forEach(ev=>document.addEventListener(ev,()=>last=Date.now()));
+setInterval(()=>{if(sess&&Date.now()-last>15*60000){sess=null;render();toast('Signed out after 15 minutes of inactivity')}},30000);
+S=load();theme();render();
+</script>
+</body>
+</html>
